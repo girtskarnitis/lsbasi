@@ -31,7 +31,7 @@ class Token(object):
 class Interpreter(object):
     def __init__(self, text):
         # client string input, e.g. "3+5"
-        self.text = text
+        self.text = text.replace(" ", "")
         # self.pos is an index into self.text
         self.pos = 0
         # current token instance
@@ -58,19 +58,30 @@ class Interpreter(object):
         # what token to create based on the single character
         current_char = text[self.pos]
 
-        # if the character is a digit then convert it to
-        # integer, create an INTEGER token, increment self.pos
-        # index to point to the next character after the digit,
-        # and return the INTEGER token
-        if current_char.isdigit():
-            token = Token(INTEGER, int(current_char))
-            self.pos += 1
-            return token
-
         if current_char == '+':
             token = Token(PLUS, current_char)
             self.pos += 1
             return token
+
+        # if the character is a digit then convert it to
+        # integer, create an INTEGER token, increment self.pos
+        # index to point to the next character after the digit,
+        # and return the INTEGER token
+        s = ""
+        if current_char.isdigit():
+            while current_char.isdigit():
+                s += current_char   
+                self.pos += 1
+                if self.pos > len(text) - 1:
+                    token = Token(INTEGER, int(s))
+                    return token
+                if text[self.pos] =="+":
+                    token = Token(INTEGER, int(s))
+                    return token
+                current_char = text[self.pos]
+            
+
+
 
         self.error()
 
