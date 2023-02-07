@@ -1,0 +1,17 @@
+PROGRAM Main
+VAR G:INTEGER
+
+STARTPROC P()
+VAR   H : INTEGER
+BEGIN
+
+    H = "H0"
+    G = H+G
+END
+ENDPROC
+
+BEGIN
+G = "G0"
+P()
+PRINT("G: " & G)
+END

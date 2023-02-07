@@ -7,7 +7,7 @@
 import argparse
 import textwrap
 
-from spi import Lexer, Parser, NodeVisitor
+from concurtran import Lexer, Parser, NodeVisitor
 
 
 class ASTVisualizer(NodeVisitor):
@@ -55,6 +55,26 @@ class ASTVisualizer(NodeVisitor):
         )
         self.dot_body.append(s)
 
+    def visit_sBlock(self, node):
+        s = '  node{} [label="Block"]\n'.format(self.ncount)
+        self.dot_body.append(s)
+        node._num = self.ncount
+        self.ncount += 1
+
+        for declaration in node.declarations:
+            self.visit(declaration)
+        self.visit(node.compound_statement)
+
+        for decl_node in node.declarations:
+            s = '  node{} -> node{}\n'.format(node._num, decl_node._num)
+            self.dot_body.append(s)
+
+        s = '  node{} -> node{}\n'.format(
+            node._num,
+            node.compound_statement._num
+        )
+        self.dot_body.append(s)
+
     def visit_VarDecl(self, node):
         s = '  node{} [label="VarDecl"]\n'.format(self.ncount)
         self.dot_body.append(s)
@@ -78,10 +98,10 @@ class ASTVisualizer(NodeVisitor):
         node._num = self.ncount
         self.ncount += 1
 
-        for param_node in node.params:
-            self.visit(param_node)
-            s = '  node{} -> node{}\n'.format(node._num, param_node._num)
-            self.dot_body.append(s)
+        #for param_node in node.params:
+        #    self.visit(param_node)
+        #    s = '  node{} -> node{}\n'.format(node._num, param_node._num)
+        #    self.dot_body.append(s)
 
         self.visit(node.block_node)
         s = '  node{} -> node{}\n'.format(node._num, node.block_node._num)

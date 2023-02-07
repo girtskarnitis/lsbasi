@@ -1,7 +1,7 @@
 # Token types
 # EOF (end-of-file) token is used to indicate that
 # there is no more input left for lexical analysis
-INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
+INTEGER, PLUS, MINUS, MUL, DIV, EOF = 'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'EOF'
 
 
 class Token(object):
@@ -15,7 +15,7 @@ class Token(object):
         """String representation of the class instance.
 
         Examples:
-            Token(INTEGER, 3)
+            Token(INTEGER, 3) 
             Token(PLUS '+')
         """
         return 'Token({type}, {value})'.format(
@@ -83,6 +83,14 @@ class Interpreter(object):
                 self.advance()
                 return Token(MINUS, '-')
 
+            if self.current_char == '*':
+                self.advance()
+                return Token(MUL, '*')
+
+            if self.current_char == '/':
+                self.advance()
+                return Token(DIV, '/')
+
             self.error()
 
         return Token(EOF, None)
@@ -111,11 +119,22 @@ class Interpreter(object):
         self.eat(INTEGER)
 
         # we expect the current token to be either a '+' or '-'
+
         op = self.current_token
-        if op.type == PLUS:
-            self.eat(PLUS)
+        if op.type == PLUS: 
+            self.eat(PLUS);
+        elif op.type == MINUS: 
+            self.eat(MINUS);
+        elif op.type == MUL: 
+            self.eat(MUL);
         else:
-            self.eat(MINUS)
+            self.eat(DIV);
+        
+        #op = self.current_token
+        #if op.type == PLUS:
+        #    self.eat(PLUS)
+        #else:
+        #    self.eat(MINUS)
 
         # we expect the current token to be an integer
         right = self.current_token
@@ -128,10 +147,21 @@ class Interpreter(object):
         # has been successfully found and the method can just
         # return the result of adding or subtracting two integers,
         # thus effectively interpreting client input
-        if op.type == PLUS:
-            result = left.value + right.value
-        else:
-            result = left.value - right.value
+
+        if op.type == PLUS: 
+            result = left.value + right.value;
+        elif op.type == MINUS: 
+            result = left.value - right.value;
+        elif op.type == MUL: 
+            result = left.value * right.value;
+        else: 
+            result = left.value / right.value;
+
+        #if op.type == PLUS:
+        #    result = left.value + right.value
+        #else:
+        #    result = left.value - right.value
+        
         return result
 
 

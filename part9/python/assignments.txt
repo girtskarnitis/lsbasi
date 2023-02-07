@@ -6,6 +6,6 @@ BEGIN
         b := 10 * a + 10 * number / 4;
         c := a - - b
     END;
-
+    z :=17;
     x := 11;
 END.

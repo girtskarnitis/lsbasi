@@ -1,0 +1,46 @@
+PROGRAM Main
+VAR R, Q, P : INTEGER
+
+STARTPROC U()
+VAR X, Y : INTEGER
+    BEGIN
+    BEGINTRAN RESERVE
+        X = "X0"
+        Y = "Y0"
+        IF X<Y THEN
+            Q = X + Y
+        ENDIF
+    COMMITTRAN
+    BEGINTRAN PAYMENT
+        R = X - P
+        Q = Y - P
+    COMMITTRAN
+    END
+ENDPROC
+
+STARTPROC V()
+VAR X, Y : INTEGER
+    BEGIN
+    BEGINTRAN RESERVE
+        X = "X0"
+        Y = "Y0"
+        IF X<Y THEN
+            Q = X + Y
+        ENDIF
+    COMMITTRAN
+    BEGINTRAN PAYMENT
+        R = X - P
+        Q = Y - P
+    COMMITTRAN
+    END
+ENDPROC
+
+BEGIN
+    R = "R0"
+    Q = "Q0"
+    P = "P0"
+    CONCURRENT(U(), V())
+    PRINT("P=" & P)
+    PRINT("R=" & R)
+    PRINT("Q=" & Q)
+END

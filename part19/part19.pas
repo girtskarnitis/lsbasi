@@ -1,10 +1,9 @@
 program Main;
-
+Var x : integer;
 procedure Alpha(a : integer; b : integer);
-var x : integer;
 
-   procedure Beta(a : integer; b : integer);
-   var x : integer;
+
+   procedure Beta(a: integer; b : integer);
    begin
       x := a * 10 + b * 2;
    end;

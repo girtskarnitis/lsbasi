@@ -1,0 +1,30 @@
+PROGRAM Main
+VAR R, Q, P : INTEGER
+
+STARTPROC U()
+    BEGIN
+    BEGINTRAN RESERVE
+        R = Q+3
+    COMMITTRAN
+    BEIGNTRAN PAYMENT
+        R = R+2
+    COMMITTRAN
+    END
+ENDPROC
+
+STARTPROC V()
+    BEGIN
+        IF R>5 THEN
+            Q = R+3
+        ENDIF
+    END
+ENDPROC
+
+BEGIN
+    R = "R0"
+    Q = "Q0"
+    CONCURRENT(U(), V())
+    PRINT("R=" & R)
+    PRINT("Q=" & Q)
+END
+
